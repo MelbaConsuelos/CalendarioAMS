@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from django.contrib import admin
 from django.db import models
 from events.models import Event
+from events.models import Venue
 import datetime
 import calendar
 from django.urls import reverse
@@ -12,7 +13,7 @@ from events.utils import EventCalendar
 
 
 class EventAdmin(admin.ModelAdmin):
-    list_display = ['day', 'start_time', 'end_time', 'notes']
+    list_display = ['event_name','day', 'start_time', 'end_time', 'notes', 'status']
     change_list_template = 'admin/events/change_list.html'
     
 
