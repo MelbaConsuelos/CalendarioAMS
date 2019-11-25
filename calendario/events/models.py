@@ -1,10 +1,37 @@
 from __future__ import unicode_literals
  
 from django.db import models
+from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.urls import reverse
 from model_utils import Choices
- 
+
+class Room(models.Model):
+    room_name = models.CharField('Room Name', max_length=100)
+
+    def __str__(self):
+        return self.room_name
+
+class Venue(models.Model):
+    venue_name = models.CharField('Venue Name', max_length=120)
+    address = models.CharField(max_length=300, default='not specified')
+    phone = models.CharField('Contact Phone', max_length=20, blank=True)
+    web = models.URLField('Web Address', blank=True)
+    room_name = models.ForeignKey(Room, on_delete=models.CASCADE, blank=True, null=True)
+
+
+    def __str__(self):
+        return self.venue_name
+
+class Venue_Room(models.Model):
+    belonging_venue = models.ForeignKey(Venue, on_delete=models.CASCADE, blank=True, null=True)
+    belonging_room_name = models.CharField('Room Name', max_length=100)
+
+    def __str__(self):
+        return self.belonging_room_name
+
+  
+
 class Event(models.Model):
     event_name = models.CharField(max_length=100)
     day = models.DateField(u'Day of the event', help_text=u'Day of the event')
@@ -12,13 +39,11 @@ class Event(models.Model):
     end_time = models.TimeField(u'Final time', help_text=u'Final time')
     notes = models.TextField(u'Textual Notes', help_text=u'Textual Notes', blank=True, null=True)
 
-    STATUS = Choices(('Tecnológico de Monterrey',['carreta','centro estudiantil']), ('Pabellón M',['Sala 1', 'Sala 2', 'Sala 3']))
-    status = models.CharField(choices=STATUS, default=STATUS.carreta, max_length=20)
-
-    
+    venue_name = models.ForeignKey(Venue, on_delete=models.CASCADE, blank=True, null=True)
+    #manager = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL)
 
 
- 
+     
     class Meta:
         verbose_name = u'Scheduling'
         verbose_name_plural = u'Scheduling'
@@ -50,9 +75,7 @@ class Event(models.Model):
                         'There is an overlap with another event: ' + str(event.day) + ', ' + str(
                             event.start_time) + '-' + str(event.end_time))
 
-class Venue(models.Model):
-    venue_name = models.CharField(max_length=100)
-    room_name = models.CharField(max_length=100)
+    def __str__(self):
+         return self.event_name
 
-    
 

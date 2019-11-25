@@ -4,6 +4,7 @@ from django.contrib import admin
 from django.db import models
 from events.models import Event
 from events.models import Venue
+from events.models import Room
 import datetime
 import calendar
 from django.urls import reverse
@@ -13,7 +14,7 @@ from events.utils import EventCalendar
 
 
 class EventAdmin(admin.ModelAdmin):
-    list_display = ['event_name','day', 'start_time', 'end_time', 'notes', 'status']
+    list_display = ['event_name','day', 'start_time', 'end_time', 'venue_name', 'notes']
     change_list_template = 'admin/events/change_list.html'
     
 
@@ -50,6 +51,18 @@ class EventAdmin(admin.ModelAdmin):
         html_calendar = html_calendar.replace('<td ', '<td  width="150" height="150"')
         extra_context['calendar'] = mark_safe(html_calendar)
         return super(EventAdmin, self).changelist_view(request, extra_context)
+
+class VenueAdmin(admin.ModelAdmin):
+      list_display = ('venue_name', 'address', 'phone','web')
+      ordering = ('venue_name',)
+      search_fields = ('venue_name', 'address')
+
+class RoomAdmin(admin.ModelAdmin):
+      list_display = ('room_name', )
+
+
  
 admin.site.register(Event, EventAdmin)
+admin.site.register(Venue, VenueAdmin)
+admin.site.register(Room, RoomAdmin)
 
