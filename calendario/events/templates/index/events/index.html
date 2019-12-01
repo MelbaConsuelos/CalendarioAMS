@@ -1,0 +1,53 @@
+{% block content %}
+  <div id="content-main">
+          <ul class="object-tools">
+            <li>
+                <a href={{ previous_month }}>
+                    Previous Month
+                </a>
+            </li>
+            <li>
+                <a href={{ next_month }}>
+                    Next Month
+                </a>
+            </li>
+        </ul>
+
+
+        {{ calendar }}
+    {% block object-tools %}
+        <ul class="object-tools">
+          {% block object-tools-items %}
+            {% if has_add_permission %}
+            <li>
+              </a>
+            </li>
+            {% endif %}
+          {% endblock %}
+        </ul>
+    {% endblock %}
+    {% if cl.formset.errors %}
+        <p class="errornote">
+        </p>
+        {{ cl.formset.non_form_errors }}
+    {% endif %}
+    <div class="module{% if cl.has_filters %} filtered{% endif %}" id="changelist">
+
+      {% block filters %}
+        {% if cl.has_filters %}
+          <div id="changelist-filter">
+          </div>
+        {% endif %}
+      {% endblock %}
+
+      <form id="changelist-form" method="post"{% if cl.formset.is_multipart %} enctype="multipart/form-data"{% endif %} novalidate>{% csrf_token %}
+      {% if cl.formset %}
+        <div>{{ cl.formset.management_form }}</div>
+      {% endif %}
+
+      {% block result_list %}
+      {% endblock %}
+      </form>
+    </div>
+  </div>
+{% endblock %}

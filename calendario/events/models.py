@@ -17,19 +17,11 @@ class Venue(models.Model):
     address = models.CharField(max_length=300, default='not specified')
     phone = models.CharField('Contact Phone', max_length=20, blank=True)
     web = models.URLField('Web Address', blank=True)
-    room_name = models.ForeignKey(Room, on_delete=models.CASCADE, blank=True, null=True)
+    room = models.ForeignKey(Room, on_delete=models.CASCADE, blank=True, null=True)
 
 
     def __str__(self):
         return self.venue_name
-
-class Venue_Room(models.Model):
-    belonging_venue = models.ForeignKey(Venue, on_delete=models.CASCADE, blank=True, null=True)
-    belonging_room_name = models.CharField('Room Name', max_length=100)
-
-    def __str__(self):
-        return self.belonging_room_name
-
   
 
 class Event(models.Model):
@@ -38,8 +30,9 @@ class Event(models.Model):
     start_time = models.TimeField(u'Starting time', help_text=u'Starting time')
     end_time = models.TimeField(u'Final time', help_text=u'Final time')
     notes = models.TextField(u'Textual Notes', help_text=u'Textual Notes', blank=True, null=True)
-
     venue_name = models.ForeignKey(Venue, on_delete=models.CASCADE, blank=True, null=True)
+
+    room_name = models.ForeignKey(Room, on_delete=models.CASCADE, blank=True, null=True)
     #manager = models.ForeignKey(User, blank=True, null=True, on_delete=models.SET_NULL)
 
 

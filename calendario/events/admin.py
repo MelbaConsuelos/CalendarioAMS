@@ -11,10 +11,10 @@ from django.urls import reverse
 from calendar import HTMLCalendar
 from django.utils.safestring import mark_safe 
 from events.utils import EventCalendar
-
+from django.contrib.admin import AdminSite
 
 class EventAdmin(admin.ModelAdmin):
-    list_display = ['event_name','day', 'start_time', 'end_time', 'venue_name', 'notes']
+    list_display = ['event_name','day', 'start_time', 'end_time', 'room_name', 'notes']
     change_list_template = 'admin/events/change_list.html'
     
 
@@ -60,8 +60,12 @@ class VenueAdmin(admin.ModelAdmin):
 class RoomAdmin(admin.ModelAdmin):
       list_display = ('room_name', )
 
+# Update admin site panel url to redirect to index.html
+class MyAdminSite(AdminSite):
+    site_url = '/index.html'
+admin.site = MyAdminSite(name='index')
 
- 
+
 admin.site.register(Event, EventAdmin)
 admin.site.register(Venue, VenueAdmin)
 admin.site.register(Room, RoomAdmin)
